@@ -3,6 +3,8 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import {Component} from "react";
 import MarvelService from "../../services/MarvelService";
+import {Spinner} from "../spinner/spinner";
+import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 
 class RandomChar extends Component {
 	constructor(props) {
@@ -11,62 +13,48 @@ class RandomChar extends Component {
 	}
 
 	state = {
-		char: {}
+		char: {},
+		loading: true,
+		error: false
 	}
 
 	marvelService = new MarvelService();
 
-	onCarloaded = (char) => {
-		this.setState({char});
+	onCharloaded = (char) => {
+		this.setState({
+			char,
+			loading: false,
+			error: false
+		});
+	}
+
+	onError = () => {
+		this.setState({
+			loading: false,
+			error: true
+		});
 	}
 
 	updateCharacter = () => {
 		const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 		this.marvelService
 			.getCaracter(id)
-			.then(this.onCarloaded);
+			.then(this.onCharloaded)
+			.catch(this.onError)
 	}
-	newDescription = (description, name) => {
-		if (description) {
-			if (description.length > 20) {
-				description = description.slice(0, 49) + '...';
-			}
-		} else if (description === '') {
-			description = `The description of ${name} is not written yet!`;
-		}
-		return description;
-	}
+
 
 	render() {
-
-		let {name, description, thumbnail, homepage, wiki} = this.state.char;
-		if (description) {
-			if (description.length > 20) {
-				description = description.slice(0, 49) + '...';
-			}
-		} else if (description === '') {
-			description = `The description of ${name} is not written yet!`;
-		}
+		const {loading, char, error} = this.state;
+		const errorMessage = error ? <ErrorMessage/> : null;
+		const spinner = loading ? <Spinner/> : null;
+		const content = !(loading || error) ? <View char={char}/> : null;
 
 		return (
 			<div className="randomchar">
-				<div className="randomchar__block">
-					<img src={thumbnail} alt="Random character" className="randomchar__img"/>
-					<div className="randomchar__info">
-						<p className="randomchar__name">{name}</p>
-						<p className="randomchar__descr">
-							{description}
-						</p>
-						<div className="randomchar__btns">
-							<a href={homepage} className="button button__main">
-								<div className="inner">HOMEPAGE</div>
-							</a>
-							<a href={wiki} className="button button__secondary">
-								<div className="inner">WIKI</div>
-							</a>
-						</div>
-					</div>
-				</div>
+				{errorMessage}
+				{spinner}
+				{content}
 				<div className="randomchar__static" onClick={this.updateCharacter}>
 					<p className="randomchar__title">
 						Random character for today!<br/>
@@ -83,6 +71,36 @@ class RandomChar extends Component {
 			</div>
 		)
 	}
+}
+
+const View = (props) => {
+	let {name, description, thumbnail, homepage, wiki} = props.char;
+	if (description) {
+		if (description.length > 20) {
+			description = description.slice(0, 49) + '...';
+		}
+	} else if (description === '') {
+		description = `The description of ${name} is not written yet!`;
+	}
+	return (
+		<div className="randomchar__block">
+			<img src={thumbnail} alt="Random character" className="randomchar__img"/>
+			<div className="randomchar__info">
+				<p className="randomchar__name">{name}</p>
+				<p className="randomchar__descr">
+					{description}
+				</p>
+				<div className="randomchar__btns">
+					<a href={homepage} className="button button__main">
+						<div className="inner">HOMEPAGE</div>
+					</a>
+					<a href={wiki} className="button button__secondary">
+						<div className="inner">WIKI</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	)
 }
 
 export default RandomChar;
