@@ -9,7 +9,7 @@ import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 class RandomChar extends Component {
 	constructor(props) {
 		super(props);
-		this.updateCharacter();/* ! нельзя вызывать в  конструкторе */
+
 	}
 
 	state = {
@@ -36,11 +36,16 @@ class RandomChar extends Component {
 	}
 
 	updateCharacter = () => {
+		this.setState({loading: true});
 		const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 		this.marvelService
 			.getCaracter(id)
 			.then(this.onCharloaded)
 			.catch(this.onError)
+	}
+
+	componentDidMount() {
+		this.updateCharacter();/* ! нельзя вызывать в  конструкторе */
 	}
 
 
@@ -75,6 +80,7 @@ class RandomChar extends Component {
 
 const View = (props) => {
 	let {name, description, thumbnail, homepage, wiki} = props.char;
+	let fitObj;
 	if (description) {
 		if (description.length > 20) {
 			description = description.slice(0, 49) + '...';
@@ -82,9 +88,14 @@ const View = (props) => {
 	} else if (description === '') {
 		description = `The description of ${name} is not written yet!`;
 	}
+	if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+		fitObj = {
+			objectFit: 'contain'
+		}
+	}
 	return (
 		<div className="randomchar__block">
-			<img src={thumbnail} alt="Random character" className="randomchar__img"/>
+			<img src={thumbnail} alt="Random character" style={fitObj} className="randomchar__img"/>
 			<div className="randomchar__info">
 				<p className="randomchar__name">{name}</p>
 				<p className="randomchar__descr">
