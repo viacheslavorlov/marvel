@@ -54,7 +54,7 @@ class CharList extends Component {
 }
 
 const CharLIstElement = (item) => {
-    const {thumbnail, name, id} = item.char;
+    const {thumbnail, name, id, wiki} = item.char;
     let fitObj;
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         fitObj = {
@@ -63,8 +63,8 @@ const CharLIstElement = (item) => {
     }
     return (
         <li className="char__item"  key={id}>
-            <img src={thumbnail} style={fitObj} alt={name}/>
-            <div className="char__name">{name}</div>
+            <a href={wiki}><img src={thumbnail} style={fitObj} alt={name}/></a>
+            <a href={wiki}><div className="char__name">{name}</div></a>
         </li>
     )
 }
