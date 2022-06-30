@@ -29,6 +29,7 @@ class MarvelService {
 	_transformCaracter = (char) => {
 		return {
 			name:char.name,
+			id: char.id,
 			description: char.description,
 			thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
 			homepage: char.urls[0].url,
