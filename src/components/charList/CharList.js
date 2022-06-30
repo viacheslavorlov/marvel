@@ -34,7 +34,7 @@ class CharList extends Component {
 
     formCharList = () => {
         return this.state.charList.map(item => {
-            return <CharLIstElement char={item}/>
+            return <CharLIstElement char={item} key={item.id} onCharSelected={this.props.onCharselected}/>
         });
     }
 
@@ -54,7 +54,7 @@ class CharList extends Component {
 }
 
 const CharLIstElement = (item) => {
-    const {thumbnail, name, id, wiki} = item.char;
+    const {thumbnail, name, id} = item.char;
     let fitObj;
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         fitObj = {
@@ -62,9 +62,9 @@ const CharLIstElement = (item) => {
         }
     }
     return (
-        <li className="char__item"  key={id}>
-            <a href={wiki}><img src={thumbnail} style={fitObj} alt={name}/></a>
-            <a href={wiki}><div className="char__name">{name}</div></a>
+        <li className="char__item" onClick={() => item.onCharSelected(id)}>
+            <img src={thumbnail} style={fitObj} alt={name}/>
+            <div className="char__name">{name}</div>
         </li>
     )
 }
