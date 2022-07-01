@@ -1,5 +1,4 @@
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
 import {Component} from "react";
 import MarvelService from "../../services/MarvelService";
 import {Spinner} from "../spinner/spinner";
@@ -73,20 +72,39 @@ class CharInfo extends Component {
 	}
 }
 
+
 const View = ({char}) => {
-	const {name, description, thumbnail, homepage, wiki, comics} = char;
-	const listOfComices = comics.map((item, i) => {
-		return(
+	let {description} = char;
+	const {name, thumbnail, homepage, wiki} = char; //переменные из объекта персонажа
+	let {comics} = char;
+	const newComics = (comics.length >= 10) ? comics.slice(0, 10) : comics;
+
+	const listOfComices = newComics.map((item, i) => {
+
+		return (
 			<li className="char__comics-item" key={i}>
-				<a href={item.resourceURI}>{item.name}</a>
+				<a href={item['resourceURI']}>{item.name}</a>
 			</li>
-		)
+		);
 	});
+	const styleMe = (comics.length > 0) ? {display: 'block'} : {display: 'none'};
+
+	let fitObj;
+	if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+		fitObj = {
+			objectFit: 'contain'
+		}
+	}
+
+	if (description === '') {
+		description = `The description of ${name} is not written yet!`;
+	}
+
 
 	return (
 		<>
 			<div className="char__basics">
-				<img src={thumbnail} alt={name}/>
+				<img src={thumbnail} style={fitObj} alt={name}/>
 				<div>
 					<div className="char__info-name">{name}</div>
 					<div className="char__btns">
@@ -102,12 +120,14 @@ const View = ({char}) => {
 			<div className="char__descr">
 				{description}
 			</div>
-			<div className="char__comics">Comics:</div>
+			<div className="char__comics" style={styleMe}>Comics:</div>
 			<ul className="char__comics-list">
+				{!newComics.length ? `There is no comics with ${name}!` : null}
 				{listOfComices}
 			</ul>
 		</>
 	)
 }
+
 
 export default CharInfo;
