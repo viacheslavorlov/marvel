@@ -11,16 +11,16 @@ class CharList extends Component {
 		loading: true,
 		error: false,
 		newItemLoading: false,
-		offset: 1550,        //для изменения offset в запросе на сервер
+		offset: 210,        //для изменения offset в запросе на сервер
 		fullCharListLoaded: false
 	}
 	marvelCharsService = new MarvelService();
 
 
 	onLoadCharacters = (chars) => {
-        let ended = false;
+		let ended = false;
 		if (chars.length < 9) {
-            ended = true;
+			ended = true;
 		}
 
 		this.setState(() => ({
@@ -29,7 +29,7 @@ class CharList extends Component {
 			error: false,
 			newItemLoading: false,
 			offset: this.state.offset + 9,
-            fullCharListLoaded: ended
+			fullCharListLoaded: ended
 		}));
 	}
 
@@ -41,6 +41,7 @@ class CharList extends Component {
 	}
 
 	onRequest = () => {
+		console.log('not scroll')
 		this.marvelCharsService
 			.getAllCaracters(this.state.offset)
 			.then(this.onLoadCharacters)
@@ -61,8 +62,27 @@ class CharList extends Component {
 			.catch(this.onError);
 	}
 
+	onRequestByScroll = () => {
+		if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+			this.onRequest();
+			console.log('scroll');
+		}
+	}
+
+
 	componentDidMount() {
 		this.updateAllChars();
+		window.addEventListener('DOMContentLoaded', (e) => {
+			if (e) {
+				window.addEventListener('scroll', this.onRequestByScroll);
+			}
+		})
+
+	}
+
+
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.onRequestByScroll)
 	}
 
 	formCharList = () => {
@@ -75,11 +95,12 @@ class CharList extends Component {
 	render() {
 
 		let display = this.state.fullCharListLoaded ? {display: 'none'} : {display: 'block'}
-        let finalMessage = <div>NO MORE CHARACTERS</div>
+		let finalMessage = <div style={{margin: '0 auto', gridColumn: '1 / span 3'}}>NO MORE CHARACTERS LEFT</div>
 		return (
 			<div className="char__list">
 				<ul className="char__grid">
 					{this.formCharList()}
+					{this.state.fullCharListLoaded ? finalMessage : null}
 				</ul>
 				<button
 					className="button button__main button__long"
@@ -88,7 +109,7 @@ class CharList extends Component {
 					disabled={this.state.newItemLoading}>
 					<div className="inner">load more</div>
 				</button>
-                {this.state.fullCharListLoaded ? finalMessage : null}
+
 			</div>
 		)
 	}
