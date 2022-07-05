@@ -2,6 +2,7 @@ import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 import {Component} from "react";
 import MarvelService from "../../services/MarvelService";
+import PropTypes from "prop-types";
 
 
 class CharList extends Component {
@@ -11,7 +12,7 @@ class CharList extends Component {
 		loading: true,
 		error: false,
 		newItemLoading: false,
-		offset: 210,        //для изменения offset в запросе на сервер
+		offset: 219,        //для изменения offset в запросе на сервер
 		fullCharListLoaded: false
 	}
 	marvelCharsService = new MarvelService();
@@ -22,6 +23,8 @@ class CharList extends Component {
 		if (chars.length < 9) {
 			ended = true;
 		}
+		const charListInState = new Set([]);
+		charListInState.add(chars);
 
 		this.setState(() => ({
 			charList: [...this.state.charList, ...chars],
@@ -31,6 +34,8 @@ class CharList extends Component {
 			offset: this.state.offset + 9,
 			fullCharListLoaded: ended
 		}));
+		console.log(chars);
+		console.log(this.state.charList);
 	}
 
 	onError = () => {
@@ -72,17 +77,11 @@ class CharList extends Component {
 
 	componentDidMount() {
 		this.updateAllChars();
-		window.addEventListener('DOMContentLoaded', (e) => {
-			if (e) {
-				window.addEventListener('scroll', this.onRequestByScroll);
-			}
-		})
-
+		window.addEventListener('scroll', this.onRequestByScroll);
 	}
 
-
 	componentWillUnmount() {
-		window.removeEventListener('scroll', this.onRequestByScroll)
+		window.removeEventListener('scroll', this.onRequestByScroll);
 	}
 
 	formCharList = () => {
@@ -131,4 +130,9 @@ const CharLIstElement = (item) => {
 	)
 }
 
+CharList.propTypes = {
+	onCharselected: PropTypes.func.isRequired
+}
+
 export default CharList;
+

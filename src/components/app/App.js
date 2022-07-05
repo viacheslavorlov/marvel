@@ -7,6 +7,7 @@ import decoration from '../../resources/img/vision.png';
 import {Component} from "react";
 import ErrorBoundary from "../errorBoundary/errorBoundary";
 
+
 class App extends Component {
 
 	state = {
@@ -16,7 +17,7 @@ class App extends Component {
 	onCharSelected = (id) => {
 		this.setState({
 			selectedChar: id
-		})
+		});
 	}
 
 	render() {
