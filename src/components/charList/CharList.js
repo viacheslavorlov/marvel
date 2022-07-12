@@ -1,6 +1,6 @@
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
-import {Component} from "react";
+import React, {Component} from "react";
 import MarvelService from "../../services/MarvelService";
 import PropTypes from "prop-types";
 
@@ -114,20 +114,45 @@ class CharList extends Component {
 	}
 }
 
-const CharLIstElement = (item) => {
-	const {thumbnail, name, id} = item.char;
-	let fitObj;
-	if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-		fitObj = {
-			objectFit: 'contain'
-		}
+class CharLIstElement extends Component {
+	constructor(props) {
+		super(props);
+		this.selectedRef = React.createRef();
+		this.selectByClick.bind(this);
 	}
-	return (
-		<li className="char__item" onClick={() => item.onCharSelected(id)}>
-			<img src={thumbnail} style={fitObj} alt={name}/>
-			<div className="char__name">{name}</div>
-		</li>
-	)
+
+	selectByClick = () => {
+		console.log(this.selectedRef.current);
+		if (document.querySelectorAll('.char__item_selected')) {
+			document.querySelectorAll('.char__item_selected').forEach(item => {
+				item.classList.remove('char__item_selected');
+			});
+		}
+		this.selectedRef.current.classList.toggle('char__item_selected');
+	}
+
+
+	render() {
+		const {thumbnail, name, id} = this.props.char;
+		let fitObj;
+		if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+			fitObj = {
+				objectFit: 'contain'
+			};
+		}
+		return (
+			<li className="char__item" ref={this.selectedRef}
+			    onClick={
+				    () => {
+						this.props.onCharSelected(id);
+					    this.selectByClick();
+				    }
+			    }>
+				<img src={thumbnail} style={fitObj} alt={name}/>
+				<div className="char__name">{name}</div>
+			</li>
+		)
+	}
 }
 
 CharList.propTypes = {
