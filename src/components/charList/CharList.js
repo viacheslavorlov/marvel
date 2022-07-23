@@ -53,7 +53,7 @@ const CharList = (props) => {
 	const onCharListLoading = () => {
 		setNewItemLoading(true);
 	}
-
+		//! Нужно разобраться как сделать скролл в реакте на
 	// const updateAllChars = (offset) => {
 	// 	onCharListLoading();
 	// 	marvelCharsService
