@@ -1,81 +1,14 @@
 import './charInfo.scss';
-import {Component} from "react";
+import {useEffect, useState} from "react";
 import MarvelService from "../../services/MarvelService";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import Skeleton from "../skeleton/Skeleton";
 import PropTypes from 'prop-types';
 
-class CharInfo extends Component {
-
-	state = {
-		char: null,
-		loading: false,
-		error: false
-	}
-
-	marvelService = new MarvelService();
-
-	onCharloaded = (char) => {
-		this.setState({
-			char,
-			loading: false,
-			error: false
-		});
-	}
-
-	onError = () => {
-		this.setState({
-			loading: false,
-			error: true
-		});
-	}
-
-	updateChar = () => {
-		const {charId} = this.props;
-		if (!charId) {
-			return;
-		}
-		this.setState({
-			loading: true
-		})
-		this.marvelService
-			.getCaracter(charId)
-			.then(this.onCharloaded)
-			.catch(this.onError)
-	}
-
-	componentDidMount() {
-		this.updateChar();
-	}
-
-	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (this.props.charId !== prevProps.charId) {
-			this.updateChar();
-		}
-	}
-
-
-	render() {
-		const {char, loading, error} = this.state;
-		const skeleton = char || loading || error ? null : <Skeleton/>;
-		const errorMessage = error ? <ErrorMessage/> : null;
-		const spinner = loading ? <Spinner/> : null;
-		const content = !(loading || error || !char) ? <View char={this.state.char}/> : null;
-
-		return (
-			<div className="char__info">
-				{skeleton}
-				{errorMessage}
-				{spinner}
-				{content}
-			</div>
-		)
-	}
-}
-
 
 const View = ({char}) => {
+	console.log('char-info', char)
 	let {description} = char;
 	const {name, thumbnail, homepage, wiki} = char; //переменные из объекта персонажа
 	let {comics} = char;
@@ -122,14 +55,74 @@ const View = ({char}) => {
 			<div className="char__descr">
 				{description}
 			</div>
-			<div className="char__comics" style={styleMe}>Comics:</div>
-			<ul className="char__comics-list">
+			<div className="char__comics">Comics:</div>
+			<ul className="char__comics-list" style={styleMe}>
 				{!newComics.length ? `There is no comics with ${name}!` : null}
 				{listOfComices}
 			</ul>
 		</>
 	)
 }
+
+const CharInfo = ({charId}) => {
+	console.log(charId);
+
+	const [char, setChar] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
+
+
+	const marvelService = new MarvelService();
+
+	const onCharloaded = (char) => {
+		setChar(char);
+		setLoading(false);
+		setError(false);
+	};
+
+	const onError = () => {
+		setLoading(false);
+		setError(true);
+	};
+
+	const updateChar = (charId) => {
+		if (!charId) {
+			return;
+		}
+		setLoading(true);
+		marvelService
+			.getCaracter(charId)
+			.then(onCharloaded)
+			.catch(onError)
+	};
+
+	useEffect(() => {
+		updateChar(charId);
+		return updateChar;
+	}, [charId]);
+
+
+
+
+
+
+	const skeleton = char || loading || error ? null : <Skeleton/>;
+	const errorMessage = error ? <ErrorMessage/> : null;
+	const spinner = loading ? <Spinner/> : null;
+	const content = !(loading || error || !char) ? <View char={char}/> : null;
+
+	return (
+		<div className="char__info">
+			{skeleton}
+			{errorMessage}
+			{spinner}
+			{content}
+		</div>
+	)
+}
+
+
+
 
 CharInfo.propTypes = {
 	charId: PropTypes.number
