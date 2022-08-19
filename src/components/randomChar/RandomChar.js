@@ -2,36 +2,25 @@ import './randomChar.scss';
 // import thor from '../../resources/img/thor.jpeg';
 import mjolnir from '../../resources/img/mjolnir.png';
 import {useEffect, useState} from "react";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/UseMarvelService";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
+
 
 const RandomChar = () => {
 
 	const [char, setChar] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
 
-	const marvelService = new MarvelService();
+	const {loading, error, getCaracter} = useMarvelService();
 
-	const onCharloaded = (charfromserver) => {
-		setChar(charfromserver);
-		setLoading(false);
-		setError(false);
-	}
-
-	const onError = () => {
-		setLoading(false);
-		setError(true);
+	const onCharloaded = (char) => {
+		setChar(char);
 	}
 
 	const updateCharacter = () => {
-		setLoading(true);
 		const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-		marvelService
-			.getCaracter(id)
-			.then(onCharloaded)
-			.catch(onError)
+		getCaracter(id)
+			.then(onCharloaded);
 	}
 
 	useEffect(() => {
@@ -65,7 +54,9 @@ const RandomChar = () => {
 	)
 }
 
+
 const View = ({char}) => {
+
 	let {name, description, thumbnail, homepage, wiki} = char;
 	let fitObj;
 	if (description) {
@@ -100,5 +91,6 @@ const View = ({char}) => {
 		</div>
 	)
 }
+
 
 export default RandomChar;

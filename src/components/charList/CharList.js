@@ -1,7 +1,7 @@
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 import React, {useEffect, useRef, useState} from "react";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/UseMarvelService";
 import PropTypes from "prop-types";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
@@ -15,7 +15,7 @@ const CharList = (props) => {
 	const [offset, setOffset] = useState(210);
 	const [fullCharListLoaded, setFullCharListLoaded] = useState(false);
 
-	const marvelCharsService = new MarvelService();
+	const marvelCharsService = useMarvelService();
 
 	useEffect(() => {
 		onRequest();
