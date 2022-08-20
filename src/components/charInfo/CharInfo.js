@@ -1,6 +1,6 @@
 import './charInfo.scss';
 import {useEffect, useState} from "react";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/UseMarvelService";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import Skeleton from "../skeleton/Skeleton";
@@ -72,7 +72,7 @@ const CharInfo = ({charId}) => {
 	const [error, setError] = useState(false);
 
 
-	const marvelService = new MarvelService();
+	const marvelService = new useMarvelService();
 
 	const onCharloaded = (char) => {
 		setChar(char);
