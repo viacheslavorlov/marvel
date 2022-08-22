@@ -1,5 +1,4 @@
 import './charList.scss';
-// import abyss from '../../resources/img/abyss.jpg';
 import React, {useEffect, useRef, useState} from "react";
 import useMarvelService from "../../services/UseMarvelService";
 import PropTypes from "prop-types";
@@ -7,18 +6,17 @@ import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 
 
+
 const CharList = (props) => {
 	const [charList, setCharList] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [fullCharListLoaded, setFullCharListLoaded] = useState(false);
 
-	const marvelCharsService = new useMarvelService();
+	const {loading, error, getAllCaracters} =  useMarvelService();
 
 	useEffect(() => {
-		onRequest();
+		onRequest(offset, true);
 	}, []);
 
 	const onLoadCharacters = (chars) => {
@@ -26,33 +24,20 @@ const CharList = (props) => {
 		if (chars.length < 9) {
 			ended = true;
 		}
-
 		setCharList(charList => [...charList, ...chars]);
-		setLoading(loading => false);
 		setNewItemLoading(newItemLoading => false);
 		setOffset(offset => offset + 9);
 		setFullCharListLoaded(ended);
-		console.log(chars);
-		console.log(charList);
 	}
 
-	const onError = () => {
-		setError(true);
-		setLoading(loading => false);
-	}
-
-	const onRequest = (off) => {
-		console.log('not scroll')
-		onCharListLoading();
-		marvelCharsService
-			.getAllCaracters(off)
+	const onRequest = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true);
+		// console.log('not scroll')
+		getAllCaracters(offset)
 			.then(onLoadCharacters)
-			.catch(onError);
 	}
 
-	const onCharListLoading = () => {
-		setNewItemLoading(true);
-	}
+
 		//! Нужно разобраться как сделать скролл в реакте на
 	// const updateAllChars = (offset) => {
 	// 	onCharListLoading();
@@ -86,15 +71,19 @@ const CharList = (props) => {
 	}
 	let display = fullCharListLoaded ? {display: 'none'} : {display: 'block'}
 	let finalMessage = <div style={{margin: '0 auto', gridColumn: '1 / span 3'}}>NO MORE CHARACTERS LEFT</div>
+	const errorMessage = error ? <ErrorMessage/> : null;
+	const spinner = loading && !newItemLoading ? <Spinner/> : null;
+	const chars = formCharList();
+
 
 	return (
 		<div className="char__list">
+			{spinner}
+			{errorMessage}
 			<ul className="char__grid">
-				{loading ? <Spinner/> : null}
-				{error ? <ErrorMessage/> : null}
-				{formCharList()}
-				{fullCharListLoaded ? finalMessage : null}
+				{chars}
 			</ul>
+			{fullCharListLoaded ? finalMessage : null}
 			<button
 				className="button button__main button__long"
 				onClick={() => onRequest(offset)}

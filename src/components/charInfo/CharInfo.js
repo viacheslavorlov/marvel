@@ -65,45 +65,29 @@ const View = ({char}) => {
 }
 
 const CharInfo = ({charId}) => {
-	console.log(charId);
 
 	const [char, setChar] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
 
-
-	const marvelService = new useMarvelService();
+	const {loading, error, getCaracter, clearError} = useMarvelService();
 
 	const onCharloaded = (char) => {
 		setChar(char);
-		setLoading(false);
-		setError(false);
 	};
 
-	const onError = () => {
-		setLoading(false);
-		setError(true);
-	};
 
 	const updateChar = (charId) => {
+		clearError();
 		if (!charId) {
 			return;
 		}
-		setLoading(true);
-		marvelService
-			.getCaracter(charId)
+		getCaracter(charId)
 			.then(onCharloaded)
-			.catch(onError)
 	};
 
 	useEffect(() => {
 		updateChar(charId);
 		return updateChar;
 	}, [charId]);
-
-
-
-
 
 
 	const skeleton = char || loading || error ? null : <Skeleton/>;
@@ -120,8 +104,6 @@ const CharInfo = ({charId}) => {
 		</div>
 	)
 }
-
-
 
 
 CharInfo.propTypes = {

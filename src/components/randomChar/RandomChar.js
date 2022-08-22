@@ -11,7 +11,7 @@ const RandomChar = () => {
 
 	const [char, setChar] = useState(null);
 
-	const {loading, error, getCaracter} = useMarvelService();
+	const {loading, error, getCaracter, clearError} = useMarvelService();
 
 
 	useEffect(() => {
@@ -20,11 +20,11 @@ const RandomChar = () => {
 
 	const onCharloaded = (char) => {
 		setChar(char);
-		console.log(char	)
 	}
 
 
 	const updateCharacter = () => {
+		clearError();
 		const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 		getCaracter(id)
 			.then(onCharloaded);
