@@ -1,8 +1,27 @@
 import './comicsList.scss';
 import uw from '../../resources/img/UW.png';
 import xMen from '../../resources/img/x-men.png';
+import useMarvelService from "../../services/UseMarvelService";
+import {useEffect, useState} from "react";
 
 const ComicsList = () => {
+    const {loading, error, getAllComicses} = useMarvelService();
+
+    const [comicses, setComicses] = useState([])
+
+    const setComicsesInState = (comicses) => {
+        setComicses(comicses);
+    }
+
+    const getComicses = () => {
+        getAllComicses()
+            .then(setComicsesInState)
+    }
+
+    useEffect(() => {
+        getComicses();
+    }, []);
+
     return (
         <div className="comics__list">
             <ul className="comics__grid">
