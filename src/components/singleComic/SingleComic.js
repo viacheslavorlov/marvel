@@ -11,10 +11,6 @@ const SingleComic = ({id}) => {
         setComics(comics);
     }
 
-    // useEffect(() => {
-    //     getComics(id)
-    //         .then(getComicsInState)
-    // }, []);
 
     useEffect(() => {
         getComics(id)
@@ -29,7 +25,7 @@ const SingleComic = ({id}) => {
                 <h2 className="single-comic__name">{comics.title}</h2>
                 <p className="single-comic__descr">{comics.description ? comics.description: 'There are no' +
                     ' description yet!'}</p>
-                <p className="single-comic__descr">Total pages: {comics.pageCount}</p>
+                <p className="single-comic__descr">Total pages: {comics.pageCount || "no info"}</p>
                 <p className="single-comic__descr">Language: {comics.language || "unknown"}</p>
                 <div className="single-comic__price">Price: {comics.price}$</div>
             </div>

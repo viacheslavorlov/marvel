@@ -14,32 +14,40 @@ const useMarvelService  = () => {
 	}
 
 	const getCaracter = async (id) => {
-		const res = await request(`${_apiBase}characters/${id}?limit=9&offset=210&apikey=${_apiKey}`);
+		const res = await request(`${_apiBase}characters/${id}?apikey=${_apiKey}`);
 		return _transformCaracter(res.data.results[0]);
 	}
 
-	const getAllComicses = async (offset = 0) => {
+	const getAllComicses = async (offset = 4510) => {
 		const res = await request(`${_apiBase}comics?limit=9&offset=${offset}&apikey=${_apiKey}`);
-		console.log(res.data.results.map(item => _transformComics(item)));
-		return res.data.results.map(item => _transformComics(item));
+		return res.data.results.map(_transformComics);
 	}
 
 	const getComics = async (id) => {
-		const res = await request(`${_apiBase}comics/${id}?&apikey=${_apiKey}`);
-		console.log(_transformComics(res.data.results[0]));
-		return _transformComics(res.data.results[0]);
+		if (id) {
+			const res = await request(`${_apiBase}comics/${id}?&apikey=${_apiKey}`);
+			return _transformComics(res.data.results[0]);
+		}
+
 	}
 
 	const _transformComics = (comics) => {
-
+		let language;
+		if (comics.textObjects.length === 0) {
+			language = 'en-us';
+		} else {
+			language = comics.textObjects[0].language;
+		}
 		return {
+			language: language,
 			title: comics.title,
 			id: comics.id,
 			thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`,
 			description: comics.description,
 			pageCount: comics.pageCount,
 			price: comics.prices[0].price,
-			url: comics.urls[0].url
+			url: comics.urls[0].url,
+
 		}
 	}
 

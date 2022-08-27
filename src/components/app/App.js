@@ -9,6 +9,7 @@ import ErrorBoundary from "../errorBoundary/errorBoundary";
 import ComicsList from "../comicsList/ComicsList";
 import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
 import SingleComic from "../singleComic/SingleComic";
+import AppBanner from "../appBanner/AppBanner";
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
 	return (
 		<div className="app">
 			<AppHeader/>
+			<AppBanner/>
 			<main>
 				<ErrorBoundary>
 					<RandomChar/>
