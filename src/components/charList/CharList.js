@@ -102,7 +102,6 @@ const CharLIstElement = (props) => {
 
 
 	const selectByClick = () => {
-		console.log(selectedRef.current);
 		if (document.querySelectorAll('.char__item_selected')) {
 			document.querySelectorAll('.char__item_selected').forEach(item => {
 				item.classList.remove('char__item_selected');
