@@ -7,9 +7,10 @@ import decoration from '../../resources/img/vision.png';
 import {useState} from "react";
 import ErrorBoundary from "../errorBoundary/errorBoundary";
 import ComicsList from "../comicsList/ComicsList";
-import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
+// import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
 import SingleComic from "../singleComic/SingleComic";
 import AppBanner from "../appBanner/AppBanner";
+import TestComponent from "../testComponent/testComponent";
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
 
 	return (
 		<div className="app">
+			<TestComponent/>
 			<AppHeader/>
 			<AppBanner/>
 			<main>
