@@ -12,10 +12,17 @@ const CharList = (props) => {
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [fullCharListLoaded, setFullCharListLoaded] = useState(false);
-
 	const {loading, error, getAllCaracters} =  useMarvelService();
 
-	let ignore = false;
+	let loadingPrevent = false;
+
+	useEffect(() => {
+		if (!loadingPrevent) {
+			onRequest(offset, true);
+			loadingPrevent = true;
+		}
+	}, []);
+
 	const onLoadCharacters = (chars) => {
 		let ended = false;
 		if (chars.length < 9) {
@@ -34,7 +41,34 @@ const CharList = (props) => {
 			.then(onLoadCharacters)
 	}
 
-	function formCharList() {
+
+		//! Нужно разобраться как сделать скролл в реакте на
+	// const updateAllChars = (offset) => {
+	// 	onCharListLoading();
+	// 	marvelCharsService
+	// 		.getAllCaracters(offset)
+	// 		.then(onLoadCharacters)
+	// 		.catch(onError);
+	// }
+
+	// function onRequestByScroll(off, list) {
+	// 	if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
+	// 		onRequest(off + list.length);
+	// 		console.log('scroll');
+	// 	}
+	// }
+	//
+	//
+	// useEffect(() => {
+	// 	window.addEventListener('scroll', () => onRequestByScroll(offset, charList.length));
+	// 	return () => window.removeEventListener('scroll', onRequestByScroll);
+	// }, []);
+
+	// componentWillUnmount() {
+	// 	window.removeEventListener('scroll', this.onRequestByScroll);
+	// }
+
+	const formCharList = () => {
 		return charList.map(item => {
 			return <CharLIstElement char={item} key={item.id} onCharSelected={props.onCharselected}/>
 		});
@@ -45,18 +79,6 @@ const CharList = (props) => {
 	const spinner = loading && !newItemLoading ? <Spinner/> : null;
 	const chars = formCharList();
 
-
-	useEffect(() => {
-
-		if (!ignore){
-			onRequest(offset, true);
-		}
-		return () => {
-			ignore = true;
-		}
-	}, []);
-
-	console.log('render CharList')
 
 	return (
 		<div className="char__list">

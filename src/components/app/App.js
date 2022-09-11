@@ -2,7 +2,6 @@ import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
-
 import decoration from '../../resources/img/vision.png';
 import {useState} from "react";
 import ErrorBoundary from "../errorBoundary/errorBoundary";
@@ -44,6 +43,7 @@ const App = () => {
 						<CharInfo charId={selectedChar}/>
 					</ErrorBoundary>
 				</div>
+				<AppBanner/>
 				<ComicsList onComicsSelected={onComicsSelected}/>
 				<SingleComic id={selectedComics}/>
 				<img className="bg-decoration" src={decoration} alt="vision"/>
