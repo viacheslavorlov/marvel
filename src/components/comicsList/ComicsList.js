@@ -1,14 +1,15 @@
 import './comicsList.scss';
 import useMarvelService from "../../services/UseMarvelService";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import ComicsListItem from "./ComicsListItem";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 
+
 const ComicsList = (props) => {
 	const {loading, error, getAllComicses} = useMarvelService();
 	const [offset, setOffset] = useState(2);
-	const [selected, setSelected] = useState(null);
+
 
 	const [comicses, setComicses] = useState([]);
 

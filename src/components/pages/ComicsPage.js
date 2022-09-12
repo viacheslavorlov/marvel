@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import ComicsList from "../comicsList/ComicsList";
-import SingleComic from "../singleComic/SingleComic";
+import SingleComic from "./SingleComic";
 
 const ComicsPage = () => {
 

@@ -5,10 +5,11 @@ import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import Skeleton from "../skeleton/Skeleton";
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 
 
 const View = ({char}) => {
-	console.log('char-info', char)
+	console.log('char-info', char);
 	let {description} = char;
 	const {name, thumbnail, homepage, wiki} = char; //переменные из объекта персонажа
 	let {comics} = char;
@@ -18,7 +19,7 @@ const View = ({char}) => {
 
 		return (
 			<li className="char__comics-item" key={i}>
-				<a href={item['resourceURI']}>{item.name}</a>
+				<Link to={`/comics/${item.resourceURI.slice(43)}`}>{item.name}</Link>
 			</li>
 		);
 	});
@@ -74,7 +75,7 @@ const CharInfo = ({charId}) => {
 		setChar(char);
 	};
 
-
+	console.log(char);
 	const updateChar = (charId) => {
 		clearError();
 		if (!charId) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 const ComicsListItem = ({comics, onComicsSelected, onSelect, id}) => {
 	return (
@@ -6,11 +7,11 @@ const ComicsListItem = ({comics, onComicsSelected, onSelect, id}) => {
 			onComicsSelected(comics.id);
 			onSelect(e);
 		}}>
-			<a href={comics.urls}>
+			<Link to={`/comics/${comics.id}`}>
 				<img src={comics.thumbnail} alt={comics.title} className="comics__item-img"/>
 				<div className="comics__item-name">{comics.title}</div>
 				<div className="comics__item-price">{comics.price} $</div>
-			</a>
+			</Link>
 		</li>
 	);
 };
