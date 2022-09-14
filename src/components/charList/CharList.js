@@ -7,6 +7,7 @@ import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 
 
 
+
 const CharList = (props) => {
 	const [charList, setCharList] = useState([]);
 	const [newItemLoading, setNewItemLoading] = useState(false);
@@ -23,7 +24,10 @@ const CharList = (props) => {
 		}
 	}, []);
 
-	const onLoadCharacters = (chars) => {
+	const onLoadCharacters = async (chars) => {
+		//* динамический импорт с помощью деструктуризации (обязательна асинхронная функция)
+		// const {logger, secondLog} = await import('./logger');
+
 		let ended = false;
 		if (chars.length < 9) {
 			ended = true;
@@ -32,6 +36,7 @@ const CharList = (props) => {
 		setNewItemLoading(newItemLoading => false);
 		setOffset(offset => offset + 9);
 		setFullCharListLoaded(ended);
+
 	}
 
 	const onRequest = (offset, initial) => {
@@ -79,6 +84,14 @@ const CharList = (props) => {
 	const spinner = loading && !newItemLoading ? <Spinner/> : null;
 	const chars = formCharList();
 
+	if (loading) {
+		import('./logger')
+			.then(obj => {
+				obj.default();
+				obj.secondLog();
+			})
+			.catch();
+	}
 
 	return (
 		<div className="char__list">
