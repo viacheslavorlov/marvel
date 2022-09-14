@@ -16,10 +16,10 @@ const View = ({char}) => {
 	const newComics = (comics.length >= 10) ? comics.slice(0, 10) : comics;
 
 	const listOfComices = newComics.map((item, i) => {
-
+	const {resourceURI} = item;
 		return (
 			<li className="char__comics-item" key={i}>
-				<Link to={`/comics/${item.resourceURI.slice(43)}`}>{item.name}</Link>
+				<Link to={`/comics/${resourceURI.slice(43)}`}>{item.name}</Link>
 			</li>
 		);
 	});
