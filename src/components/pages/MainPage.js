@@ -3,7 +3,7 @@ import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import decoration from "../../resources/img/vision.png";
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 
 const MainPage = () => {
 	const [selectedChar, setSelectedChar] = useState(null);

@@ -1,5 +1,5 @@
 import './charInfo.scss';
-import {useEffect, useState} from "react";
+import {useEffect, useState, memo} from "react";
 import useMarvelService from "../../services/UseMarvelService";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
@@ -8,8 +8,16 @@ import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 
 
-const View = ({char}) => {
-	console.log('char-info', char);
+function ComponentCompare(prevProps, nextProps) {
+	console.log('prevProps', prevProps.char.id);
+	console.log('nextProps', nextProps.char.id);
+
+	return prevProps.char.id === nextProps.char.id;
+}
+
+const View = memo(({char}) => {
+	console.log('CarInfo render complete')
+	// console.log('char-info', char);
 	let {description} = char;
 	const {name, thumbnail, homepage, wiki} = char; //переменные из объекта персонажа
 	let {comics} = char;
@@ -63,7 +71,7 @@ const View = ({char}) => {
 			</ul>
 		</>
 	)
-}
+}, ComponentCompare);
 
 const CharInfo = ({charId}) => {
 
@@ -75,7 +83,8 @@ const CharInfo = ({charId}) => {
 		setChar(char);
 	};
 
-	console.log(char);
+
+	// console.log(char);
 	const updateChar = (charId) => {
 		clearError();
 		if (!charId) {
@@ -87,7 +96,7 @@ const CharInfo = ({charId}) => {
 
 	useEffect(() => {
 		updateChar(charId);
-		return updateChar;
+		// return updateChar;
 	}, [charId]);
 
 
@@ -95,6 +104,8 @@ const CharInfo = ({charId}) => {
 	const errorMessage = error ? <ErrorMessage/> : null;
 	const spinner = loading ? <Spinner/> : null;
 	const content = !(loading || error || !char) ? <View char={char}/> : null;
+
+	console.log("CharInfo render")
 
 	return (
 		<div className="char__info">
@@ -104,7 +115,7 @@ const CharInfo = ({charId}) => {
 			{content}
 		</div>
 	)
-}
+};
 
 
 CharInfo.propTypes = {

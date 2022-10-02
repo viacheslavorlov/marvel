@@ -4,6 +4,7 @@ import useMarvelService from "../../services/UseMarvelService";
 import PropTypes from "prop-types";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
+import {CSSTransition} from "react-transition-group";
 
 
 
@@ -98,7 +99,7 @@ const CharList = (props) => {
 			{spinner}
 			{errorMessage}
 			<ul className="char__grid">
-				{chars}
+					{chars}
 			</ul>
 			{fullCharListLoaded ? finalMessage : null}
 			<button
