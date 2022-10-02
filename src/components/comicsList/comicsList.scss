@@ -40,3 +40,22 @@
         }
     }
 }
+
+.comics__transition-enter {
+    opacity: 0;
+    visibility: hidden;
+}
+.comics__transition-enter-active {
+    opacity: 1;
+    visibility: visible;
+    transition: all 1000ms;
+}
+.comics__transition-exit {
+    opacity: 1;
+    visibility: visible;
+}
+.comics__transition-exit-active {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 1000ms;
+}

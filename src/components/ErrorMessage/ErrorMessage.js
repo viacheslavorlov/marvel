@@ -1,8 +1,9 @@
-import img from'../../resources/img/Ghost.gif';
+import img from '../../resources/img/Ghost.gif';
 import './ErrorMessage.scss';
+import {CSSTransition} from "react-transition-group";
 
 export const ErrorMessage = () => {
-	return(
+	return (
 		<>
 			<img src={img} alt="Error"/>
 		</>

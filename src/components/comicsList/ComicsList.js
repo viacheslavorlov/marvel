@@ -1,9 +1,10 @@
 import './comicsList.scss';
 import useMarvelService from "../../services/UseMarvelService";
-import {useEffect, useState} from "react";
+import React, {createRef, useEffect, useRef, useState} from "react";
 import ComicsListItem from "./ComicsListItem";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 
 const ComicsList = (props) => {
@@ -33,17 +34,38 @@ const ComicsList = (props) => {
 		getComicses(offset);
 	}, []);
 
-	const content = comicses.map((item, index) => {
-		return <ComicsListItem id={item.id + index} comics={item} key={item.id + index}
-		                       onComicsSelected={props.onComicsSelected} onSelect={onSelect}/>
-	});
 
+
+	const formContent = () => {
+		return comicses.map((item, index) => {
+			const nodeRef = createRef()
+			return (
+				<CSSTransition key={item.id + index}
+				               classNames={"comics__transition"}
+				               timeout={1000}
+				               nodeRef={nodeRef}
+				               >
+					<div ref={nodeRef}>
+						<ComicsListItem id={item.id + index} comics={item}
+						                onComicsSelected={props.onComicsSelected} onSelect={onSelect}/>
+					</div>
+
+				</CSSTransition>
+			)
+
+		});
+		}
+	const content = formContent();
 
 	return (
 		<div className="comics__list">
 			<ul className="comics__grid">
+				{
+					<TransitionGroup component={null} >
+						{content}
+					</TransitionGroup>
+				}
 				{error ? <ErrorMessage/> : null}
-				{content}
 				{loading ? <Spinner/> : null}
 			</ul>
 			<button className="button button__main button__long">

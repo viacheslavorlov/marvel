@@ -1,5 +1,7 @@
 import {useHttp} from "../hooks/http.hook";
 
+
+
 const useMarvelService  = () => {
 	const {loading, request, error, clearError} = useHttp();
 
@@ -46,7 +48,7 @@ const useMarvelService  = () => {
 			description: comics.description,
 			pageCount: comics.pageCount,
 			price: comics.prices[0].price,
-			url: comics.urls[0].url,
+			url: comics.urls[0].url
 
 		}
 	}
@@ -59,7 +61,8 @@ const useMarvelService  = () => {
 			thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
 			homepage: char.urls[0].url,
 			wiki: char.urls[1].url,
-			comics: char.comics.items
+			comics: char.comics.items,
+
 		}
 	}
 	return {loading, error, getCaracter, getAllCaracters, getAllComicses, getComics, clearError};
