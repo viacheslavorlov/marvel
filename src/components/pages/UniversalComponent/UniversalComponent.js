@@ -1,26 +1,27 @@
 
-import {useParams, Link} from "react-router-dom";
+import {useParams, Link, useLocation} from "react-router-dom";
 import useMarvelService from "../../../services/UseMarvelService";
 import {useEffect, useState} from "react";
 import {Spinner} from "../../spinner/spinner";
 import {NoMatch} from "../index";
 
 const SingleItem = () => {
-	const params = useParams();
-	console.log(params);
+	const {id} = useParams();
+	const {pathname} = useLocation();
+	console.log(pathname, id);
 	const [item, setItem] = useState(null);
 	const {getComics, getCaracterByName, clearError, loading, error} = useMarvelService();
-
-	const getComicsInState = (item) => {
+	const getItem = pathname.match('comics') ? getComics : getCaracterByName;
+	const getItemInState = (item) => {
 		setItem(item);
 	}
 
 
 	useEffect(() => {
 		clearError();
-		getComics(ItemId)
-			.then(getComicsInState)
-	}, [ItemId]);
+		getItem(id)
+			.then(getItemInState)
+	}, [id]);
 
 	const errorMesage = error ? <NoMatch/> : null;
 	const spinner = loading ? <Spinner/> : null;
@@ -49,7 +50,7 @@ const View = ({comics}) => {
 				<p className="single-comic__descr">Language: {language || "unknown"}</p>
 				<div className="single-comic__price">Price: {price}$</div>
 			</div>
-			<Link to="/comics" className="single-comic__back">Back to all</Link>
+			<Link to={"/comics"} className="single-comic__back">Back to all</Link>
 		</div>
 	)
 }

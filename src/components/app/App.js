@@ -5,6 +5,7 @@ import AppBanner from "../appBanner/AppBanner";
 import {Spinner} from "../spinner/spinner";
 import {lazy, Suspense} from "react";
 import {MainPage} from "../pages";
+import UniversalComponent from "../pages/UniversalComponent/UniversalComponent";
 // import SingleChar from "../pages/singleChar/SingleCaracter"
 // import SingleCaracter from "../pages/singleChar/SingleCaracter";
 
@@ -26,8 +27,10 @@ const App = () => {
 						<Routes>
 							<Route path="/" element={<MainPage/>}/>
 							<Route path="/comics" element={<ComicsPage/>}/>
-							<Route path="comics/:comicsId" element={<SingleComic/>}/>
-							<Route path="/character/:charId" element={<SingleChar/>}/>
+							{/*<Route path="comics/:comicsId" element={<SingleComic/>}/>*/}
+							{/*<Route path="/character/:charId" element={<SingleChar/>}/>*/}
+							<Route path="comics/:id" element={<UniversalComponent/>}/>
+							<Route path="character/:id" element={<UniversalComponent/>}/>
 							<Route path="*" element={<NoMatch/>}/>
 						</Routes>
 				</main>
