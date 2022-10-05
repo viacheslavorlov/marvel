@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ComicsList from "../comicsList/ComicsList";
-import SingleComic from "./SingleComic";
+import SingleComic from "./singleComic/SingleComic";
+import FormFind from "../form/FormFind";
 
 const ComicsPage = () => {
 

@@ -3,7 +3,8 @@ import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import decoration from "../../resources/img/vision.png";
-import React, {useState, memo} from 'react';
+import React, {useState} from 'react';
+import FormFind from "../form/FormFind";
 
 const MainPage = () => {
 	const [selectedChar, setSelectedChar] = useState(null);
@@ -21,11 +22,16 @@ const MainPage = () => {
 				<ErrorBoundary>
 					<CharList onCharselected={onCharSelected}/>
 				</ErrorBoundary>
-				<ErrorBoundary>
-					<CharInfo charId={selectedChar}/>
-				</ErrorBoundary>
-				<img className="bg-decoration" src={decoration} alt="vision"/>
+				<div>
+					<ErrorBoundary>
+						<CharInfo charId={selectedChar}/>
+					</ErrorBoundary>
+					<FormFind/>
+				</div>
+
+
 			</div>
+			<img className="bg-decoration" src={decoration} alt="vision"/>
 		</>
 	);
 };

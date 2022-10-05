@@ -6,6 +6,7 @@ import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import Skeleton from "../skeleton/Skeleton";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import FormFind from "../form/FormFind";
 
 
 function ComponentCompare(prevProps, nextProps) {

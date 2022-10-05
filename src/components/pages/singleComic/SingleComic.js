@@ -1,9 +1,9 @@
 import './singleComic.scss';
 import {useParams, Link} from "react-router-dom";
-import useMarvelService from "../../services/UseMarvelService";
+import useMarvelService from "../../../services/UseMarvelService";
 import {useEffect, useState} from "react";
-import {Spinner} from "../spinner/spinner";
-import {NoMatch} from "./index";
+import {Spinner} from "../../spinner/spinner";
+import {NoMatch} from "../index";
 
 const SingleComic = () => {
 

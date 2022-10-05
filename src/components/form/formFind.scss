@@ -1,0 +1,55 @@
+@import '../../style/variables.scss';
+
+.form {
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+  &__input{
+    padding: 20px;
+    margin: 20px;
+    height: 2em;
+  }
+  &__error {
+    color: #9f0013;
+    padding-left: 20px;
+    font-weight: bolder;
+  }
+  &__success {
+    padding: 0 0 0 20px;
+    display: flex;
+    &__message {
+      margin-right: 20px;
+      color: green;
+      font-weight: bolder;
+    }
+  }
+  &__not-found {
+    color: #9f0013;
+    font-weight: bolder;
+  }
+  //&__block {
+  //  padding: 40px 35px;
+  //  display: grid;
+  //  grid-template-columns: 180px auto;
+  //  column-gap: 30px;
+  //}
+  //
+  //
+  //&__btns {
+  //  a:nth-child(1) {
+  //    margin-right: 30px;
+  //  }
+  //}
+  //
+  //&__static {
+  //  padding: 40px 35px;
+  //  background-color: $dark;
+  //  position: relative;
+  //
+  //  button {
+  //    margin-top: 13px;
+  //  }
+  //}
+
+
+}
