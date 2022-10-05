@@ -4,14 +4,14 @@ import useMarvelService from "../../../services/UseMarvelService";
 import {useEffect, useState} from "react";
 import {Spinner} from "../../spinner/spinner";
 import {NoMatch} from "../index";
+import {Helmet} from "react-helmet";
 
 const SingleItem = () => {
 	const {id} = useParams();
 	const {pathname} = useLocation();
-	console.log(pathname, id);
 	const [item, setItem] = useState(null);
 	const {getComics, getCaracter, clearError, loading, error} = useMarvelService();
-	const getItem = pathname.match('comics') ? getComics : getCaracter;
+
 	const getItemInState = (item) => {
 		setItem(item);
 	}
@@ -19,7 +19,7 @@ const SingleItem = () => {
 
 	useEffect(() => {
 		clearError();
-		getItem(id)
+		(pathname.match('comics') ? getComics(id) : getCaracter(id))
 			.then(getItemInState)
 	}, [id]);
 
@@ -29,6 +29,7 @@ const SingleItem = () => {
 
 	return (
 		<>
+
 			{errorMesage}
 			{spinner}
 			{content}
@@ -40,6 +41,14 @@ const SingleItem = () => {
 const View = ({item, pathname}) => {
 	const {thumbnail, name, title, description, pageCount, language, price} = item;
 	return (
+		<>
+		<Helmet>
+			<meta
+				name="description"
+				content={item?.title || item.name}
+			/>
+			<title>{item?.title || item.name}</title>
+		</Helmet>
 		<div className="single-comic">
 			<img src={thumbnail} alt={title || name} className="single-comic__img"/>
 			<div className="single-comic__info">
@@ -52,6 +61,7 @@ const View = ({item, pathname}) => {
 			</div>
 			<Link to={`${pathname.match('comics') ? '/comics' : '/'}`} className="single-comic__back">Back to all</Link>
 		</div>
+		</>
 	)
 }
 

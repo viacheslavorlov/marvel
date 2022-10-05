@@ -32,10 +32,7 @@ const FormFind = () => {
 						setCharacter(null)
 						setCharNotFound(false)
 						getCaracterByName(values.name)
-							.then(res => {
-								setCharacter(res);
-								// setCharNotFound(false)
-							})
+							.then(res => setCharacter(res))
 							.catch(() => setCharNotFound(true));
 
 					}}>

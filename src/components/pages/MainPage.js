@@ -5,6 +5,7 @@ import CharInfo from "../charInfo/CharInfo";
 import decoration from "../../resources/img/vision.png";
 import React, {useState} from 'react';
 import FormFind from "../form/FormFind";
+import {Helmet} from "react-helmet";
 
 const MainPage = () => {
 	const [selectedChar, setSelectedChar] = useState(null);
@@ -15,6 +16,13 @@ const MainPage = () => {
 
 	return (
 		<>
+			<Helmet>
+				<meta
+					name="description"
+					content="Marvel information portal"
+				/>
+				<title>Marvel information</title>
+			</Helmet>
 			<ErrorBoundary>
 				<RandomChar/>
 			</ErrorBoundary>
