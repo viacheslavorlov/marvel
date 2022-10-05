@@ -6,7 +6,6 @@ import useMarvelService from "../../services/UseMarvelService";
 import {Link} from "react-router-dom";
 
 const FormFind = () => {
-	const [charName, setCharName] = useState('')
 	const [character, setCharacter] = useState(null);
 	const [charNotFound, setCharNotFound] = useState(false);
 	const {getCaracterByName} = useMarvelService();
@@ -34,9 +33,9 @@ const FormFind = () => {
 						getCaracterByName(values.name)
 							.then(res => {
 								setCharacter(res);
-								setCharNotFound(false)
+								// setCharNotFound(false)
 							})
-							.catch(setCharNotFound(true));
+							.catch(() => setCharNotFound(true));
 
 					}}>
 					<Form component={'div'}>

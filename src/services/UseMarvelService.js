@@ -60,7 +60,7 @@ const useMarvelService  = () => {
 
 	const _transformCaracter = (char) => {
 		return {
-			name:char.name,
+			name: char.name,
 			id: char.id,
 			description: char.description,
 			thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
