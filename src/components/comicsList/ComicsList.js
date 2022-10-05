@@ -1,6 +1,6 @@
 import './comicsList.scss';
 import useMarvelService from "../../services/UseMarvelService";
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useState} from "react";
 import ComicsListItem from "./ComicsListItem";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
