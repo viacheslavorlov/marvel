@@ -10,8 +10,8 @@ const SingleItem = () => {
 	const {pathname} = useLocation();
 	console.log(pathname, id);
 	const [item, setItem] = useState(null);
-	const {getComics, getCaracterByName, clearError, loading, error} = useMarvelService();
-	const getItem = pathname.match('comics') ? getComics : getCaracterByName;
+	const {getComics, getCaracter, clearError, loading, error} = useMarvelService();
+	const getItem = pathname.match('comics') ? getComics : getCaracter;
 	const getItemInState = (item) => {
 		setItem(item);
 	}
@@ -25,7 +25,7 @@ const SingleItem = () => {
 
 	const errorMesage = error ? <NoMatch/> : null;
 	const spinner = loading ? <Spinner/> : null;
-	const content = !(!item || error || loading) ? <View comics={item}/> : null;
+	const content = !(!item || error || loading) ? <View pathname={pathname} item={item}/> : null;
 
 	return (
 		<>
@@ -37,20 +37,20 @@ const SingleItem = () => {
 	)
 }
 
-const View = ({comics}) => {
-	const {thumbnail, title, description, pageCount, language, price} = comics;
+const View = ({item, pathname}) => {
+	const {thumbnail, name, title, description, pageCount, language, price} = item;
 	return (
 		<div className="single-comic">
-			<img src={thumbnail} alt={title} className="single-comic__img"/>
+			<img src={thumbnail} alt={title || name} className="single-comic__img"/>
 			<div className="single-comic__info">
-				<h2 className="single-comic__name">{title}</h2>
-				<p className="single-comic__descr">{description ? comics.description: 'There are no' +
+				<h2 className="single-comic__name">{title || name}</h2>
+				<p className="single-comic__descr">{description ? item.description: 'There are no' +
 					' description yet!'}</p>
-				<p className="single-comic__descr">Total pages: {pageCount || "no info"}</p>
-				<p className="single-comic__descr">Language: {language || "unknown"}</p>
-				<div className="single-comic__price">Price: {price}$</div>
+				{pageCount ? <p className="single-comic__descr">Total pages: {pageCount || "no info"}</p> : null}
+				{language ? <p className="single-comic__descr">Language: {language || "unknown"}</p> : null}
+				{price ? <div className="single-comic__price">Price: {price}$</div> : null}
 			</div>
-			<Link to={"/comics"} className="single-comic__back">Back to all</Link>
+			<Link to={`${pathname.match('comics') ? '/comics' : '/'}`} className="single-comic__back">Back to all</Link>
 		</div>
 	)
 }

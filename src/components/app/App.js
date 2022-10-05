@@ -5,15 +5,14 @@ import AppBanner from "../appBanner/AppBanner";
 import {Spinner} from "../spinner/spinner";
 import {lazy, Suspense} from "react";
 import {MainPage} from "../pages";
-import UniversalComponent from "../pages/UniversalComponent/UniversalComponent";
+
 // import SingleChar from "../pages/singleChar/SingleCaracter"
 // import SingleCaracter from "../pages/singleChar/SingleCaracter";
 
 // const MainPage = lazy(() => import('../pages/MainPage'));
 const NoMatch = lazy(() => import('../pages/404'));
 const ComicsPage = lazy(() => import('../pages/ComicsPage'));
-const SingleComic = lazy(() => import('../pages/singleComic/SingleComic'));
-const SingleChar = lazy(() => import('../pages/singleChar/SingleCaracter'))
+const SingleItem = lazy(() => import('../pages/UniversalComponent/UniversalComponent'))
 // build 688 KB 14/09  09:48
 const App = () => {
 	return (
@@ -29,8 +28,8 @@ const App = () => {
 							<Route path="/comics" element={<ComicsPage/>}/>
 							{/*<Route path="comics/:comicsId" element={<SingleComic/>}/>*/}
 							{/*<Route path="/character/:charId" element={<SingleChar/>}/>*/}
-							<Route path="comics/:id" element={<UniversalComponent/>}/>
-							<Route path="character/:id" element={<UniversalComponent/>}/>
+							<Route path="comics/:id" element={<SingleItem/>}/>
+							<Route path="characters/:id" element={<SingleItem/>}/>
 							<Route path="*" element={<NoMatch/>}/>
 						</Routes>
 				</main>

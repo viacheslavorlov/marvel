@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import {Formik, ErrorMessage, Field, Form} from "formik";
 import useMarvelService from "../../services/UseMarvelService";
-import {Link, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const FormFind = () => {
 	const [character, setCharacter] = useState(null);
 	const [charNotFound, setCharNotFound] = useState(false);
 	const {getCaracterByName} = useMarvelService();
-	let {pathname} = useLocation();
+
 
 	useEffect(() => {
 
@@ -64,7 +64,7 @@ const FormFind = () => {
 							<div className="form__success__message">There is! Visit {character.name} page?</div>
 							<button className="button button__secondary">
 								<div className="inner">
-									<Link to={`//${character.id}`}>TO PAGE</Link>
+									<Link to={`characters/${character.id}`}>TO PAGE</Link>
 								</div>
 
 							</button>
