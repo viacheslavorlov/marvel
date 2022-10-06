@@ -1,7 +1,7 @@
 import {useHttp} from "../hooks/http.hook";
 
 const useMarvelService  = () => {
-	const {loading, request, error, clearError, process, setProcess} = useHttp();
+	const {request, clearError, process, setProcess} = useHttp();
 
 	const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
 	const _apiKey = '1e344272825c1465c008c37081a94a35';
@@ -19,7 +19,7 @@ const useMarvelService  = () => {
 	}
 
 	const getAllComicses = async (offset = 4510) => {
-		const res = await request(`${_apiBase}comics?limit=9&offset=${offset}&apikey=${_apiKey}`);
+		const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&apikey=${_apiKey}`);
 		return res.data.results.map(_transformComics);
 	}
 
@@ -70,7 +70,7 @@ const useMarvelService  = () => {
 
 		}
 	}
-	return {loading, error, process, setProcess, getCaracter, getAllCaracters, getAllComicses, getComics, getCaracterByName, clearError};
+	return {process, setProcess, getCaracter, getAllCaracters, getAllComicses, getComics, getCaracterByName, clearError};
 }
 
 export default useMarvelService;

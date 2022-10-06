@@ -1,27 +1,42 @@
 import './comicsList.scss';
 import useMarvelService from "../../services/UseMarvelService";
-import React, {createRef, useEffect, useState} from "react";
+import React, {createRef, useEffect, useMemo, useState} from "react";
 import ComicsListItem from "./ComicsListItem";
 import {Spinner} from "../spinner/spinner";
 import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 
+const setContent = (process, Component, newItemLoading) => {
+	switch (process) {
+		case 'waiting':
+			return <Spinner/>;
+		case 'loading':
+			return newItemLoading ? <Component/> : <Spinner/>;
+		case 'confirmed':
+			return <Component/>;
+		case 'error':
+			return <ErrorMessage/>;
+		default:
+			throw new Error('Unexpected process state');
+	}
+}
 
 const ComicsList = (props) => {
-	const {loading, error, getAllComicses} = useMarvelService();
 	const [offset, setOffset] = useState(2);
-
-
 	const [comicses, setComicses] = useState([]);
+	const [newItemLoading, setNewItemLoading] = useState(false);
+	const {getAllComicses, process, setProcess} = useMarvelService();
 
 	const setComicsesInState = (newComicses) => {
 		setComicses([...comicses, ...newComicses]);
 	}
 
-	const getComicses = () => {
-		setOffset(offset + 9);
+	const getComicses = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true);
+		setOffset(() => offset + 8);
 		getAllComicses(offset)
 			.then(setComicsesInState)
+			.then(() => setProcess('confirmed'));
 	}
 
 	const onSelect = (e) => { // активный элемент
@@ -31,8 +46,9 @@ const ComicsList = (props) => {
 	}
 
 	useEffect(() => {
-		getComicses(offset);
+		getComicses(offset, true);
 	}, []);
+
 
 
 
@@ -55,7 +71,7 @@ const ComicsList = (props) => {
 
 		});
 		}
-	const content = formContent();
+	const content = useMemo(() => setContent(process, () => formContent(), newItemLoading), [newItemLoading]);
 
 	return (
 		<div className="comics__list">
@@ -65,8 +81,8 @@ const ComicsList = (props) => {
 						{content}
 					</TransitionGroup>
 				}
-				{error ? <ErrorMessage/> : null}
-				{loading ? <Spinner/> : null}
+				{/*{error ? <ErrorMessage/> : null}*/}
+				{/*{loading ? <Spinner/> : null}*/}
 			</ul>
 			<button className="button button__main button__long">
 				<div className="inner" onClick={() => getComicses(offset)}>load more</div>

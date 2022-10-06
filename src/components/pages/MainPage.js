@@ -14,6 +14,7 @@ const MainPage = () => {
 		setSelectedChar(id);
 	}
 
+	console.log('main page render')
 	return (
 		<>
 			<Helmet>

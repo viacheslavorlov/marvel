@@ -1,5 +1,5 @@
 import './charList.scss';
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useMemo, useRef, useState} from "react";
 import useMarvelService from "../../services/UseMarvelService";
 import PropTypes from "prop-types";
 import {Spinner} from "../spinner/spinner";
@@ -7,12 +7,28 @@ import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 
+const setContent = (process, Component, newItemLoading) => {
+	switch (process) {
+		case 'waiting':
+			return <Spinner/>;
+		case 'loading':
+			return newItemLoading ? <Component/> : <Spinner/>;
+		case 'confirmed':
+			return <Component/>;
+		case 'error':
+			return <ErrorMessage/>;
+		default:
+			throw new Error('Unexpected process state');
+	}
+}
+
+
 const CharList = (props) => {
 	const [charList, setCharList] = useState([]);
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(210);
 	const [fullCharListLoaded, setFullCharListLoaded] = useState(false);
-	const {loading, error, getAllCaracters} = useMarvelService();
+	const {getAllCaracters, process, setProcess} = useMarvelService();
 
 
 	let loadingPrevent = false;
@@ -44,6 +60,7 @@ const CharList = (props) => {
 		// console.log('not scroll')
 		getAllCaracters(offset)
 			.then(onLoadCharacters)
+			.then(() => setProcess('confirmed'));
 	}
 
 
@@ -66,16 +83,17 @@ const CharList = (props) => {
 	// 	window.removeEventListener('scroll', this.onRequestByScroll);
 	// }
 
-	const formCharList = () => {
-		return charList.map(item => {
-			const nodeRef = createRef(null);
+	const formCharList = (list) => {
+		console.log('render characters')
+		return list.map(item => {
+			const nodeRef = createRef();
 			return (
 				<CSSTransition
 					key={item.id}
 					timeout={1000}
 					nodeRef={nodeRef}
 					classNames="char__transition"
-					>
+				>
 					<div ref={nodeRef}>
 						<CharLIstElement char={item} onCharSelected={props.onCharselected}/>
 					</div>
@@ -85,23 +103,16 @@ const CharList = (props) => {
 	}
 	let display = fullCharListLoaded ? {display: 'none'} : {display: 'block'}
 	let finalMessage = <div style={{margin: '0 auto', gridColumn: '1 / span 3'}}>NO MORE CHARACTERS LEFT</div>
-	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading && !newItemLoading ? <Spinner/> : null;
-	const chars = formCharList();
+	// const errorMessage = error ? <ErrorMessage/> : null;
+	// const spinner = loading && !newItemLoading ? <Spinner/> : null;
 
-	if (loading) {
-		import('./logger')
-			.then(obj => {
-				obj.default();
-				obj.secondLog();
-			})
-			.catch();
-	}
+	const chars = useMemo(() => {
+		return setContent(process, () => formCharList(charList), newItemLoading)
+	}, [charList]);
 
 	return (
 		<div className="char__list">
-			{spinner}
-			{errorMessage}
+
 			<ul>
 				<TransitionGroup className="char__grid">
 					{chars}
@@ -123,7 +134,7 @@ const CharList = (props) => {
 
 const CharLIstElement = (props) => {
 	const selectedRef = useRef(null);
-	const nodeRef = useRef(null);
+	
 
 	const selectByClick = () => {
 		if (document.querySelectorAll('.char__item_selected')) {
@@ -144,11 +155,15 @@ const CharLIstElement = (props) => {
 	}
 	return (
 		<li className="char__item" ref={selectedRef}
-		    onClick={
-			    () => {
-				    props.onCharSelected(id);
-				    selectByClick();
-			    }
+		    tabIndex={0}
+		    onFocus={() => {
+			    props.onCharSelected(id);
+			    selectByClick();
+		    }}
+		    onClick={() => {
+			    props.onCharSelected(id);
+			    selectByClick();
+		    }
 		    }>
 			<img src={thumbnail} style={fitObj} alt={name}/>
 			<div className="char__name">{name}</div>

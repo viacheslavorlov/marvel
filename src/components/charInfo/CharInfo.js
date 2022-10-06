@@ -1,5 +1,5 @@
 import './charInfo.scss';
-import {useEffect, useState, memo} from "react";
+import {useEffect, useState, memo, useMemo} from "react";
 import useMarvelService from "../../services/UseMarvelService";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
@@ -7,22 +7,22 @@ import setContent from "../../utils/setContent";
 
 
 function ComponentCompare(prevProps, nextProps) {
-	console.log('prevProps', prevProps.char.id);
-	console.log('nextProps', nextProps.char.id);
+	console.log('prevProps', prevProps.data.id);
+	console.log('nextProps', nextProps.data.id);
 
-	return prevProps.char.id === nextProps.char.id;
+	return prevProps.data.id === nextProps.data.id;
 }
 
-const View = memo(({char}) => {
+const View = memo(({data}) => {
 	console.log('CarInfo render complete')
 	// console.log('char-info', char);
-	let {description} = char;
-	const {name, thumbnail, homepage, wiki} = char; //переменные из объекта персонажа
-	let {comics} = char;
+	let {description} = data;
+	const {name, thumbnail, homepage, wiki} = data; //переменные из объекта персонажа
+	let {comics} = data;
 	const newComics = (comics.length >= 10) ? comics.slice(0, 10) : comics;
 
 	const listOfComices = newComics.map((item, i) => {
-	const {resourceURI} = item;
+		const {resourceURI} = item;
 		return (
 			<li className="char__comics-item" key={i}>
 				<Link to={`/comics/${resourceURI.slice(43)}`}>{item.name}</Link>
@@ -75,6 +75,7 @@ const CharInfo = ({charId}) => {
 
 	const [char, setChar] = useState(null);
 
+	//* fsm logic
 	const {process, getCaracter, clearError, setProcess} = useMarvelService();
 
 	const onCharloaded = (char) => {
@@ -90,6 +91,7 @@ const CharInfo = ({charId}) => {
 		clearError();
 		getCaracter(charId)
 			.then(onCharloaded)
+			//* fsm logic
 			.then(() => setProcess('confirmed'));
 	};
 
@@ -97,9 +99,8 @@ const CharInfo = ({charId}) => {
 		updateChar(charId);
 	}, [charId]);
 
-	//* fsm logic
 
-
+	//* old logic
 	// const skeleton = char || loading || error ? null : <Skeleton/>;
 	// const errorMessage = error ? <ErrorMessage/> : null;
 	// const spinner = loading ? <Spinner/> : null;
@@ -107,10 +108,13 @@ const CharInfo = ({charId}) => {
 
 	console.log("CharInfo render")
 
+	//* fsm logic
+	const content = useMemo(() => {
+		return setContent(process, View, char)
+	}, [char]);
 	return (
 		<div className="char__info">
-
-			{setContent(process, View, char)}
+			{content}
 			{/*{skeleton}*/}
 			{/*{errorMessage}*/}
 			{/*{spinner}*/}

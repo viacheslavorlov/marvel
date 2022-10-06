@@ -1,5 +1,5 @@
-export const View = ({char}) => {
-    let {name, description, thumbnail, homepage, wiki} = char;
+export const View = ({data}) => {
+    let {name, description, thumbnail, homepage, wiki} = data;
     let fitObj;
     if (description) {
         if (description.length > 20) {
