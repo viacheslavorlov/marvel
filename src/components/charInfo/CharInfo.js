@@ -1,12 +1,9 @@
 import './charInfo.scss';
 import {useEffect, useState, memo} from "react";
 import useMarvelService from "../../services/UseMarvelService";
-import {Spinner} from "../spinner/spinner";
-import {ErrorMessage} from "../ErrorMessage/ErrorMessage";
-import Skeleton from "../skeleton/Skeleton";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
-import FormFind from "../form/FormFind";
+import setContent from "../../utils/setContent";
 
 
 function ComponentCompare(prevProps, nextProps) {
@@ -78,7 +75,7 @@ const CharInfo = ({charId}) => {
 
 	const [char, setChar] = useState(null);
 
-	const {loading, error, getCaracter, clearError} = useMarvelService();
+	const {process, getCaracter, clearError, setProcess} = useMarvelService();
 
 	const onCharloaded = (char) => {
 		setChar(char);
@@ -87,33 +84,37 @@ const CharInfo = ({charId}) => {
 
 	// console.log(char);
 	const updateChar = (charId) => {
-		clearError();
 		if (!charId) {
 			return;
 		}
+		clearError();
 		getCaracter(charId)
 			.then(onCharloaded)
+			.then(() => setProcess('confirmed'));
 	};
 
 	useEffect(() => {
 		updateChar(charId);
-		// return updateChar;
 	}, [charId]);
 
+	//* fsm logic
 
-	const skeleton = char || loading || error ? null : <Skeleton/>;
-	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading ? <Spinner/> : null;
-	const content = !(loading || error || !char) ? <View char={char}/> : null;
+
+	// const skeleton = char || loading || error ? null : <Skeleton/>;
+	// const errorMessage = error ? <ErrorMessage/> : null;
+	// const spinner = loading ? <Spinner/> : null;
+	// const content = !(loading || error || !char) ? <View char={char}/> : null;
 
 	console.log("CharInfo render")
 
 	return (
 		<div className="char__info">
-			{skeleton}
-			{errorMessage}
-			{spinner}
-			{content}
+
+			{setContent(process, View, char)}
+			{/*{skeleton}*/}
+			{/*{errorMessage}*/}
+			{/*{spinner}*/}
+			{/*{content}*/}
 		</div>
 	)
 };
