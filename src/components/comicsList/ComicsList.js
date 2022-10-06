@@ -71,7 +71,7 @@ const ComicsList = (props) => {
 
 		});
 		}
-	const content = useMemo(() => setContent(process, () => formContent(), newItemLoading), [newItemLoading]);
+	const content = useMemo(() => setContent(process, () => formContent(), newItemLoading), [newItemLoading, process]);
 
 	return (
 		<div className="comics__list">
