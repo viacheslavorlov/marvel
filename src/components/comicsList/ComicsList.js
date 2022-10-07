@@ -71,7 +71,9 @@ const ComicsList = (props) => {
 
 		});
 		}
-	const content = useMemo(() => setContent(process, () => formContent(), newItemLoading), [newItemLoading, process]);
+	const content = useMemo(() => {
+		return setContent(process, () => formContent(), newItemLoading)
+	}, [newItemLoading, process]);
 
 	return (
 		<div className="comics__list">
@@ -84,8 +86,10 @@ const ComicsList = (props) => {
 				{/*{error ? <ErrorMessage/> : null}*/}
 				{/*{loading ? <Spinner/> : null}*/}
 			</ul>
-			<button className="button button__main button__long">
-				<div className="inner" onClick={() => getComicses(offset)}>load more</div>
+			<button className="button button__main button__long"
+			        onClick={() => getComicses(offset)}
+					disabled={process === 'loading'}>
+				<div className="inner">load more</div>
 			</button>
 		</div>
 	)
