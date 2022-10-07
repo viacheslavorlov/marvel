@@ -4,7 +4,7 @@ import AppBanner from "../appBanner/AppBanner";
 // import TestComponent from "../testComponent/testComponent";
 import {Spinner} from "../spinner/spinner";
 import {lazy, Suspense} from "react";
-import {MainPage} from "../pages";
+import {MainPage} from "../pages/";
 
 // import SingleChar from "../pages/singleChar/SingleCaracter"
 // import SingleCaracter from "../pages/singleChar/SingleCaracter";

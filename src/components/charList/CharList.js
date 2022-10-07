@@ -114,7 +114,7 @@ const CharList = (props) => {
 		<div className="char__list">
 
 			<ul>
-				<TransitionGroup className="char__grid">
+				<TransitionGroup className="char__grid" component={'div'}>
 					{chars}
 				</TransitionGroup>
 			</ul>
